@@ -1,157 +1,119 @@
-# 🌍 TravelGo - Evaluación 2
+# TravelGo 📱✈️
 
-> Proyecto Android desarrollado con **Kotlin + Jetpack Compose**, basado en la arquitectura **MVVM**, que implementa conexión a API REST, manejo de estado, navegación y la integración de cámara/galería para el avatar del usuario.
+Proyecto Semestral – Examen Transversal
+Asignatura: DSY1105 – Desarrollo de Aplicaciones Móviles    
+Docente: Roberto Arce    
 
----
-
-## 🧩 Descripción General
-
-**TravelGo** es una aplicación móvil de tipo SPA (Single Page App) para la gestión de usuarios y paquetes turísticos sustentables.  
-El proyecto fue desarrollado como parte de la **Evaluación 2** del ramo de programación móvil, y combina tanto conceptos teóricos de arquitectura como la práctica de integración de servicios externos (API REST) y recursos nativos (cámara, almacenamiento, permisos, etc.).
-
----
-
-## 🚀 Funcionalidades Implementadas
-
-### ✅ 1. Arquitectura Base
-- Estructura **MVVM** separada por capas:
-  - `data/` → Capa de datos (Retrofit, DTO, DataStore)
-  - `repository/` → Manejo de lógica de acceso a datos
-  - `viewmodel/` → Manejo de estados y lógica de presentación
-  - `ui/` → Pantallas y componentes Compose
-- Navegación entre pantallas con **Navigation Compose**.
-
-### ✅ 2. API REST (según la guía)
-Implementación completa siguiendo la [Guía: Cómo Agregar API REST a tu Proyecto Android](./Guia_Agregar_API_REST_A_Tu_Proyecto.md):
-- Cliente HTTP configurado con **Retrofit** + **OkHttp**.
-- **AuthInterceptor** para inyectar tokens JWT automáticamente.
-- **HttpLoggingInterceptor** para visualizar peticiones/respuestas en Logcat.
-- DTOs (`UserDto`, `LoginRequest`, `LoginResponse`, etc.) definidos según los endpoints.
-- Repositorio (`UserRepository`) que abstrae el acceso a la API.
-- Manejo de errores y estados (`isLoading`, `error`, `success`) en `ProfileViewModel`.
-
-### ✅ 3. Pantalla de Perfil (ProfileScreen)
-- Obtiene los datos del usuario desde la API y los muestra dinámicamente.
-- Muestra estados de carga y error con UI reactiva (Compose + StateFlow).
-- Botón de **“Refrescar”** para recargar datos del servidor.
-
-### ✅ 4. Integración de Cámara y Galería
-Implementación siguiendo el [Tutorial de Cámara y Avatar](./TUTORIAL_CAMARA_AVATAR.md):
-- Permisos dinámicos (`CAMERA`, `READ_MEDIA_IMAGES`, `READ_EXTERNAL_STORAGE`).
-- **Accompanist Permissions** para control declarativo de permisos.
-- **ActivityResultContracts** para manejar resultados de cámara y galería.
-- Uso de **Coil** para mostrar imágenes (URIs locales y remotas).
-- Botones funcionales para “Tomar foto” y “Elegir de galería”.
-- Estado `avatarUri` agregado al `ProfileUiState`.
-- **Persistencia del avatar** implementada con **DataStore Preferences**.
-
-### ✅ 5. Dependencias configuradas correctamente
-Incluye todas las librerías necesarias en `build.gradle.kts`:
-```kotlin
-implementation("io.coil-kt:coil-compose:2.6.0")
-implementation("com.google.accompanist:accompanist-permissions:0.35.2-beta")
-implementation("com.squareup.retrofit2:retrofit:2.11.0")
-implementation("com.squareup.okhttp3:okhttp:4.12.0")
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-implementation("androidx.datastore:datastore-preferences:1.0.0")
-implementation("androidx.navigation:navigation-compose:2.8.3")
-```
-
----
-
-## ⚙️ Estructura del Proyecto
-
-```
-com.example.travelgo/
-│
-├── data/
-│   ├── remote/           # API REST (RetrofitClient, ApiService)
-│   ├── local/            # DataStore, SessionManager
-│   └── dto/              # Clases de transferencia de datos (UserDto, LoginRequest)
-│
-├── repository/
-│   └── UserRepository.kt # Coordinación de datos remotos/locales
-│
-├── ui/
-│   ├── screens/          # Pantallas principales (Home, Profile)
-│   ├── components/       # Componentes reutilizables (dialogs, botones)
-│   ├── navigation/       # AppNavigation con rutas Compose
-│   └── theme/            # Colores y tipografía
-│
-├── viewmodel/
-│   └── ProfileViewModel.kt
-│
-└── MainActivity.kt       # Punto de entrada de la app
-```
-
----
-
-## 🧠 Conceptos Aprendidos
-
-- Patrón **MVVM** aplicado en proyectos reales.
-- Uso de **Retrofit + OkHttp + Coroutines** para peticiones HTTP asíncronas.
-- **StateFlow** como fuente única de verdad para los estados de UI.
-- **Accompanist Permissions** para permisos en Compose.
-- **FileProvider** para URIs seguras entre apps.
-- **Coil** para carga eficiente de imágenes.
-- **DataStore** para persistencia de preferencias y URIs.
-- **ActivityResult API** moderna (reemplazo de `startActivityForResult`).
-
----
-
-## ⚠️ Aspectos Pendientes / Mejoras Futuras
-
-| Categoría | Descripción |
-|------------|--------------|
-| 🔐 Autenticación | Implementar login real con JWT y guardar token en `SessionManager`. |
-| 🧩 API dinámica | Cambiar base URL (`BASE_URL`) desde DummyJSON a API propia del proyecto. |
-| 🖼️ FileProvider | Configurar archivo `file_paths.xml` y `<provider>` en `AndroidManifest.xml` (opcional si se usa `MediaStore`). |
-| 💾 Subida de imagen | Agregar endpoint en Retrofit para subir el avatar al servidor. |
-| 📱 Navegación completa | Integrar todas las pantallas (Home, Reservas, Paquetes). |
-| 🧪 Tests | Agregar Unit Tests y pruebas de integración para `UserRepository` y `ProfileViewModel`. |
-| 🎨 Diseño | Mejorar UI/UX con Material3 avanzado (animaciones, layouts responsivos). |
-
----
-
-## 🧰 Tecnologías y Librerías Usadas
-
-| Tipo | Herramienta |
-|------|--------------|
-| Lenguaje | Kotlin |
-| UI | Jetpack Compose |
-| Arquitectura | MVVM |
-| Navegación | Navigation Compose |
-| Estado | StateFlow + ViewModel |
-| Networking | Retrofit + OkHttp + Gson Converter |
-| Imágenes | Coil |
-| Permisos | Accompanist Permissions |
-| Persistencia | DataStore Preferences |
-| Logging | HttpLoggingInterceptor |
-| IDE | Android Studio Iguana+ |
-
----
-
-## 🧪 Estado Final
-
-| Módulo | Estado | Descripción |
-|--------|--------|-------------|
-| MVVM Base | ✅ | Implementado correctamente |
-| API REST | ✅ | Funciona con DummyJSON |
-| Cámara/Galería | ✅ | Totalmente funcional |
-| Persistencia de Avatar | ✅ | DataStore operativa |
-| FileProvider | ⚠️ | Parcial, requiere ajuste en manifest |
-| Login/Auth | 🚧 | En desarrollo |
-| Pruebas | 🚧 | No implementadas aún |
-
----
-
-## 👥 Integrantes
-
--👤 Daniel Castro 
--👤 Bruno Ratto
-
-## 👨‍🏫 Profesor : Roberto Arce 
+👥 Integrantes
+- Daniel Castro  
+- Bruno Ratto  
 
 
 
+📌 Descripción de la App
 
+TravelGo es una aplicación móvil Android desarrollada en **Kotlin**, orientada a la gestión y visualización de información relacionada con viajes y usuarios.
+La aplicación integra consumo de servicios REST, persistencia local, gestión de estado reactiva y uso de recursos nativos del dispositivo, siguiendo la arquitectura **MVVM (Model – View – ViewModel)**.
+
+⚙️ Funcionalidades Principales
+
+- Visualización de información de usuario desde una **API REST**.
+- Gestión de perfil de usuario.
+- Navegación entre pantallas mediante **Navigation Compose**.
+- Manejo de estados de carga, éxito y error en la interfaz.
+- Consumo de servicios externos mediante **Retrofit**.
+- Uso de **cámara** y **galería** del dispositivo.
+- Persistencia local de información mediante **DataStore**.
+- Interfaz moderna basada en **Material Design 3**.
+
+🌐 Endpoints Utilizados
+🔹 API REST Externa
+
+Los siguientes endpoints son consumidos desde la aplicación móvil:
+
+- `GET /users` – Obtención de información de usuario.
+- `POST /login` – Autenticación de usuario.
+- `PUT /users/{id}` – Actualización de datos de usuario.
+- `DELETE /users/{id}` – Eliminación de usuario.
+Estos endpoints corresponden a una API REST externa, consumida mediante Retrofit y OkHttp.
+
+🔹 Microservicios Propios
+
+Actualmente, el proyecto no incluye microservicios propios desarrollados dentro de este repositorio.  
+La integración se realiza mediante consumo de servicios REST externos, lo cual es demostrado durante la ejecución y defensa del proyecto.
+
+
+▶️ Instrucciones para Ejecutar el Proyecto
+
+🔧 Requisitos Previos
+
+- Android Studio (versión Flamingo o superior).
+- JDK 17 o compatible.
+- Emulador Android o dispositivo físico.
+
+▶️ Pasos de Ejecución
+
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/karasuu999/travelgo-et.git
+   
+2. Abrir el proyecto en Android Studio.
+
+3. Esperar la sincronización de dependencias con Gradle.
+
+4. Ejecutar la aplicación en un emulador o dispositivo físico.
+
+5. Otorgar los permisos solicitados (cámara y almacenamiento).
+
+
+📦 APK Firmado y Archivo .jks
+
+El proyecto contempla la generación de un APK firmado para su instalación en dispositivos reales.
+El archivo .jks no se incluye en el repositorio por razones de seguridad.
+El .jks se genera y almacena de forma local en el equipo del desarrollador.
+El APK firmado se genera desde Android Studio utilizando la opción:
+Build → Generate Signed Bundle / APK
+
+💻 Código Fuente
+📱 Aplicación Móvil
+
+- El código fuente completo de la aplicación móvil Android se encuentra en este repositorio.
+- Incluye arquitectura MVVM, consumo de API REST, persistencia local y uso de recursos nativos.
+
+🌐 Microservicios
+
+- Este repositorio no contiene código fuente de microservicios propios.
+- La integración se realiza mediante servicios REST externos.
+
+🤝 Trabajo Colaborativo
+El desarrollo del proyecto se realizó de forma colaborativa:
+
+- Repositorio GitHub público.
+- Uso de control de versiones mediante Git.
+- Commits realizados por Daniel Castro.
+- Evidencia de participación individual visible en el historial de commits del repositorio.
+
+🛠️ Tecnologías Utilizadas
+
+🎨 Frontend
+
+- Kotlin
+- Android Studio
+- Jetpack Compose
+- Material Design 3
+- Navigation Compose
+
+🌐 Backend / Datos
+
+- API REST
+- Retrofit
+- OkHttp
+
+🔧 Herramientas
+
+- GitHub
+- Emulador Android Studio
+
+✅ Conclusión
+
+TravelGo es una aplicación móvil Android funcional que integra arquitectura MVVM, diseño moderno con Material Design 3, consumo de servicios REST, persistencia local y uso de recursos nativos del dispositivo.
